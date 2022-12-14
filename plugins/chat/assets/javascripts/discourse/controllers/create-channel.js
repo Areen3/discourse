@@ -120,17 +120,30 @@ export default class CreateChannelController extends Controller.extend(
       return ChatApi.categoryPermissions(category.id).then((catPermissions) => {
         this._updateAutoJoinConfirmWarning(category, catPermissions);
         const allowedGroups = catPermissions.allowed_groups;
-        const translationKey =
-          allowedGroups.length < 3 ? "hint_groups" : "hint_multiple_groups";
+        let translationKey;
+
+        switch (allowedGroups.length) {
+          case 1:
+            translationKey = "chat.create_channel.choose_category.hint_1_group";
+            break;
+          case 2:
+            translationKey =
+              "chat.create_channel.choose_category.hint_2_group2";
+            break;
+          default:
+            translationKey =
+              "chat.create_channel.choose_category.hint_multiple_groups";
+            break;
+        }
 
         this.set(
           "categoryPermissionsHint",
           htmlSafe(
-            I18n.t(`chat.create_channel.choose_category.${translationKey}`, {
+            I18n.t(translationKey, {
               link: `/c/${escapeExpression(fullSlug)}/edit/security`,
-              hint: escapeExpression(allowedGroups[0]),
-              hint_2: escapeExpression(allowedGroups[1]),
-              count: allowedGroups.length,
+              group_1: escapeExpression(allowedGroups[0]),
+              group_2: escapeExpression(allowedGroups[1]),
+              count: allowedGroups.length - 1,
             })
           )
         );

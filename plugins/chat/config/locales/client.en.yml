@@ -116,10 +116,10 @@ en:
         without_membership:
           one: "%{username} has not joined this channel."
           other: "%{username} and %{others} have not joined this channel."
-        group_mentions_disabled: 
+        group_mentions_disabled:
           one: "%{group_name} doesn't allow mentions"
           other: "%{group_name} and %{others} doesn't allow mentions"
-        too_many_members: 
+        too_many_members:
           one: "%{group_name} has too many members. No one was notified"
           other: "%{group_name} and %{others} have too many members. No one was notified"
         warning_multiple:
@@ -280,10 +280,9 @@ en:
           label: "Choose a category"
           none: "select one..."
           default_hint: Manage access by visiting <a href=%{link} target="_blank">%{category} security settings</a>
-          hint_groups:
-            one: Users in %{hint} will have access to this channel per the <a href=%{link} target="_blank">security settings</a>
-            other: Users in %{hint} and %{hint_2} will have access to this channel per the <a href=%{link} target="_blank">security settings</a>
-          hint_multiple_groups: Users in %{hint_1} and %{count} other groups will have access to this channel per the <a href=%{link} target="_blank">security settings</a>
+          hint_1_group: 'Users in %{group_1} will have access to this channel per the <a href="%{link}" target="_blank">security settings</a>'
+          hint_2_groups: 'Users in %{group_1} and %{group_2} will have access to this channel per the <a href="%{link}" target="_blank">security settings</a>'
+          hint_multiple_groups: 'Users in %{group_1} and %{count} other groups will have access to this channel per the <a href="%{link}" target="_blank">security settings</a>'
         create: "Create channel"
         description: "Description (optional)"
         name: "Channel name"
