@@ -78,3 +78,52 @@ task "i18n:reseed", [:locale] => [:environment] do |_, args|
   SeedData::Categories.new(locale).update
   SeedData::Topics.new(locale).update
 end
+
+task "i18n:find", [:key] => [:environment] do |_, args|
+  key = args[:key]&.to_s
+
+  if key.blank?
+    puts "ERROR: Expecting rake i18n:find[key]"
+    exit 1
+  end
+
+  key.delete_prefix!("root.")
+  key.delete_prefix!("js.")
+  key.delete_prefix!("admin_js.")
+  key.delete_prefix!("wizard_js.")
+
+  escaped_key = Regexp.escape(key)
+
+  ignored_paths = [
+    "node_modules/"
+  ]
+
+  patterns_and_regexes = {
+    "**/*.hbs" => [
+      /(<DButton)[^>]*(@(?:title|label|ariaLabel)=["']#{escaped_key}["'])[^>]*>/,
+      /(<CountI18n)[^>]*(@key=["']#{escaped_key}["'])[^>]*>/,
+      /(i18n\s+["']#{escaped_key}["'])/i
+    ],
+    "**/*.js" => [
+      /(i18n[^"'`]*?\s*["'`]?#{escaped_key}[^\.\w])/i
+    ]
+  }
+
+  patterns_and_regexes.each do |pattern, regexes|
+    Dir["#{File.join(Rails.root, pattern)}"].each do |path|
+      next if !File.file?(path)
+
+      relative_path = Pathname.new(path).relative_path_from(Pathname.new(Rails.root)).to_s
+      next if ignored_paths.any? { |p| relative_path.start_with?(p) }
+
+      content = File.read(path).gsub("\n", " ")
+
+      regexes.each do |r|
+        content.scan(r)&.each do |m|
+          excerpt = m.map { |s| s.include?(key) ? s.green : s }.join(" ")
+          puts "#{relative_path}    #{excerpt}"
+        end
+      end
+    end
+  end
+end
