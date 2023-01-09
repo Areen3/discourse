@@ -1568,6 +1568,28 @@ RSpec.describe CookedPostProcessor do
           HTML
         end
 
+        context "with video upload" do
+          SiteSetting.authorized_extensions = "png|jpg|gif|mp4"
+
+          #before { SiteSetting.authorized_extensions = "" }
+          fab!(:video_upload) { Fabricate(:video_upload) }
+
+          it "works" do
+            post = Fabricate(:post, raw: "test video upload:\n\n![test|video](#{video_upload.url})")
+            cpp = CookedPostProcessor.new(post.reload)
+            expect(cpp.html).to match_html <<~HTML
+              <p>test video upload:</p>
+              <p></p><div class="video-container">
+                <video width="100%" height="100%" preload="metadata" controls="">
+                  <source src="/uploads/default/test_0/#{Discourse.store.get_path_for_upload(video_upload)}">
+                  <a href="/uploads/default/test_0/#{Discourse.store.get_path_for_upload(video_upload)}">/uploads/default/test_0/#{Discourse.store.get_path_for_upload(video_upload)}</a>
+                </source></video>
+              </div><p></p>
+            HTML
+          end
+
+        end
+
         context "with media uploads" do
           fab!(:image_upload) { Fabricate(:upload) }
           fab!(:audio_upload) { Fabricate(:upload, extension: "ogg") }
