@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pre-initializers/chat-plugin-api.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pre-initializers/chat-plugin-api.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { withPluginApi } from "discourse/lib/plugin-api";
+import {
+  addChatMessageDecorator,
+  resetChatMessageDecorators,
+} from "discourse/plugins/chat/discourse/components/chat-message";
+import { registerChatComposerButton } from "discourse/plugins/chat/discourse/lib/chat-composer-buttons";
+
+/**
+ * Class exposing the javascript API available to plugins and themes.
+ * @class PluginApi
+ */
+
+/**
+ * Callback used to decorate a chat message
+ *
+ * @callback PluginApi~decorateChatMessageCallback
+ * @param {ChatMessage} chatMessage - model
+ * @param {HTMLElement} messageContainer - DOM node
+ * @param {ChatChannel} chatChannel - model
+ */
+
+/**
+ * Decorate a chat message
+ *
+ * @memberof PluginApi
+ * @instance
+ * @function decorateChatMessage
+ * @param {PluginApi~decorateChatMessageCallback} decorator
+ * @example
+ *
+ * api.decorateChatMessage((chatMessage, messageContainer) => {
+ *   messageContainer.dataset.foo = chatMessage.id;
+ * });
+ */
+
+/**
+ * Register a button in the chat composer
+ *
+ * @memberof PluginApi
+ * @instance
+ * @function registerChatComposerButton
+ * @param {Object} options
+ * @param {number} options.id - The id of the button
+ * @param {function} options.action - An action name or an anonymous function called when the button is pressed, eg: "onFooClicked" or `() => { console.log("clicked") }`
+ * @param {string} options.icon - A valid font awesome icon name, eg: "far fa-image"
+ * @param {string} options.label - Text displayed on the button, a translatable key, eg: "foo.bar"
+ * @param {string} options.translatedLabel - Text displayed on the button, a string, eg: "Add gifs"
+ * @param {string} [options.position] - Can be "inline" or "dropdown", defaults to "inline"
+ * @param {string} [options.title] - Title attribute of the button, a translatable key, eg: "foo.bar"
+ * @param {string} [options.translatedTitle] - Title attribute of the button, a string, eg: "Add gifs"
+ * @param {string} [options.ariaLabel] - aria-label attribute of the button, a translatable key, eg: "foo.bar"
+ * @param {string} [options.translatedAriaLabel] - aria-label attribute of the button, a string, eg: "Add gifs"
+ * @param {string} [options.classNames] - Additional names to add to the button’s class attribute, eg: ["foo", "bar"]
+ * @param {boolean} [options.displayed] - Hide or show the button
+ * @param {boolean} [options.disabled] - Sets the disabled attribute on the button
+ * @param {number} [options.priority] - An integer defining the order of the buttons, higher comes first, eg: `700`
+ * @param {Array.&lt;string>} [options.dependentKeys] - List of property names which should trigger a refresh of the buttons when changed, eg: `["foo.bar", "bar.baz"]`
+ * @example
+ *
+ * api.registerChatComposerButton({
+ *   id: "foo",
+ *   displayed() {
+ *     return this.site.mobileView &amp;&amp; this.canAttachUploads;
+ *   }
+ * });
+ */
+
+export default {
+  name: "chat-plugin-api",
+  after: "inject-discourse-objects",
+
+  initialize() {
+    withPluginApi("1.2.0", (api) => {
+      const apiPrototype = Object.getPrototypeOf(api);
+
+      if (!apiPrototype.hasOwnProperty("decorateChatMessage")) {
+        Object.defineProperty(apiPrototype, "decorateChatMessage", {
+          value(decorator) {
+            addChatMessageDecorator(decorator);
+          },
+        });
+      }
+
+      if (!apiPrototype.hasOwnProperty("registerChatComposerButton")) {
+        Object.defineProperty(apiPrototype, "registerChatComposerButton", {
+          value(button) {
+            registerChatComposerButton(button);
+          },
+        });
+      }
+    });
+  },
+
+  teardown() {
+    resetChatMessageDecorators();
+  },
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ChatApi.html">ChatApi</a></li><li><a href="module-Collection.html">Collection</a></li></ul><h3>Classes</h3><ul><li><a href="PluginApi.html">PluginApi</a></li><li><a href="module-ChatApi.html">ChatApi</a></li><li><a href="module-Collection.html">Collection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
