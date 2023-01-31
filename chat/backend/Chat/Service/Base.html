@@ -136,7 +136,31 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Checks the validity of the given context.</p>
+<p>Checks the validity of the input parameters.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#policy-class_method" title="policy (class method)">.<strong>policy</strong>(name = :default, &amp;block)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Evaluates a set of conditions related to the given context.</p>
 </div></span>
   
 </li>
@@ -245,7 +269,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Checks the validity of the given context. Supports after/before/around callbacks. Implements ActiveModel::Validations and ActiveModel::Attributes.</p>
+<p>Checks the validity of the input parameters. Supports after/before/around callbacks. Implements ActiveModel::Validations and ActiveModel::Attributes.</p>
 
 
   </div>
@@ -277,7 +301,58 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 138</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 160</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="policy-class_method">
+  
+    .<strong>policy</strong>(name = :default, &amp;block)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Evaluates a set of conditions related to the given context. If the block doesn’t return a truthy value, then the policy will fail. Supports after/before/around callbacks. More than one policy can be defined and named. When that’s the case, policies are evaluated in their definition order.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_before_policies'>before_policies</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+<span class='id identifier rubyid_around_policies'>around_policies</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+<span class='id identifier rubyid_after_policies'>after_policies</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+<span class='id identifier rubyid_policy'>policy</span><span class='lparen'>(</span><span class='symbol'>:invalid_access</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_guardian'>guardian</span><span class='period'>.</span><span class='id identifier rubyid_can_delete_chat_channel?'>can_delete_chat_channel?</span>
+<span class='kw'>end</span></code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 143</span>
 
 </pre>
     </td>
@@ -326,7 +401,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 164</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 186</span>
 
 </pre>
     </td>
@@ -375,7 +450,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 153</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 175</span>
 
 </pre>
     </td>
@@ -462,7 +537,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 176</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 198</span>
 
 </pre>
     </td>
