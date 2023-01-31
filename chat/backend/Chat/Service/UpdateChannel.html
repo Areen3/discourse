@@ -338,7 +338,7 @@
     <td>
       <pre class="code"><span class="info file"># File 'plugins/chat/app/services/update_channel.rb', line 34</span>
 
-<span class='id identifier rubyid_before_contract'>before_contract</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_guardian'>guardian</span><span class='lparen'>(</span><span class='symbol'>:can_edit_chat_channel?</span><span class='rparen'>)</span> <span class='rbrace'>}</span></pre>
+<span class='id identifier rubyid_policy'>policy</span><span class='lparen'>(</span><span class='symbol'>:invalid_access</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_guardian'>guardian</span><span class='period'>.</span><span class='id identifier rubyid_can_edit_chat_channel?'>can_edit_chat_channel?</span> <span class='rbrace'>}</span></pre>
     </td>
   </tr>
 </table>
