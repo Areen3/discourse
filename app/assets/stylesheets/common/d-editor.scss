@@ -255,6 +255,28 @@
       }
     }
 
+    .timestamp-readonly-container {
+      flex: 1 1;
+      width: 100%;
+
+      .timestamp {
+        margin-right: 0.5em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+
+      .timestamp-edit-btn {
+        cursor: pointer;
+        color: var(--tertiary);
+
+        svg {
+          padding-right: 0.5em;
+        }
+      }
+    }
+
     .alt-text-edit-container {
       margin-top: 0.25em;
       gap: 0 0.25em;

@@ -10,13 +10,13 @@ function isUpload(token) {
 function buildVideoShowTimestampControls(videoTimestamp) {
   return `
   <span class="timestamp-readonly-container">
-  <span class="timestamp-edit-btn">
-  <svg aria-hidden="true" class="fa d-icon d-icon-pencil svg-icon svg-string"><use href="#pencil-alt"></use></svg>
-</span>
+    <span class="timestamp-edit-btn">
+      <svg aria-hidden="true" class="fa d-icon d-icon-pencil svg-icon svg-string"><use href="#pencil-alt"></use></svg>
+    </span>
 
-  <span class="alt-text" aria-label="${I18n.t(
-    "composer.video_timestamp.aria_label"
-  )}">${videoTimestamp}</span>
+    <span class="timestamp" aria-label="${I18n.t(
+      "composer.video_timestamp.aria_label"
+    )}">${videoTimestamp}</span>
   </span>
   `;
 }
@@ -75,7 +75,7 @@ function ruleWithVideoControls(oldRule) {
     //  let selectedScale = token.attrs[scaleIndex][1];
     //  let index = token.attrs[imageIndex][1];
 
-    let result = `<span class="placeholder-icon">`;
+    let result = `<span class="image-wrapper">`;
 
     result += oldRule(tokens, idx, options, env, slf);
 
@@ -93,7 +93,7 @@ function ruleWithVideoControls(oldRule) {
     //  result += `</span>`;
     //  result += buildImageDeleteButton();
 
-    //  result += "</span></span>";
+    result += "</span></span></span>";
 
     return result;
     //} else {
@@ -106,8 +106,17 @@ export function setup(helper) {
   const opts = helper.getOptions();
   if (opts.previewing) {
     helper.allowList([
+      "span.image-wrapper",
+      "span.timestamp-wrapper",
+      "span.button-wrapper",
+      "div[id=screenshot-placeholder]",
       "span[class=placeholder-icon]",
-      "span[class=button-wrapper]",
+      "span[class=timestamp-edit-btn]",
+      "span[aria-label]",
+      "span.timestamp-container",
+      "span.timestamp-readonly-container",
+      "span.timestamp-readonly-container.timestamp",
+      "span.timestamp-readonly-container.timestamp-edit-btn",
       "svg[width]",
       "svg[height]",
       "svg[xmlns]",
@@ -115,10 +124,14 @@ export function setup(helper) {
       "path[fill]",
       "path[d]",
       "video[id]",
+      "video[hidden]",
       "video[controls]",
       "video[preload]",
-      "canvas",
+      "canvas[id=canvas]",
+      "canvas[hidden]",
       "div[id=screenshots]",
+      "svg[class=fa d-icon d-icon-pencil svg-icon svg-string]",
+      "use[href=#pencil-alt]",
     ]);
 
     helper.registerPlugin((md) => {
@@ -158,8 +171,6 @@ export function setup(helper) {
     img.width = 120;
     ssContainer.appendChild(img);
   }
-
-
 
 }
 

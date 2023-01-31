@@ -41,6 +41,10 @@ import { isTesting } from "discourse-common/config/environment";
 import { loadOneboxes } from "discourse/lib/load-oneboxes";
 import putCursorAtEnd from "discourse/lib/put-cursor-at-end";
 import userSearch from "discourse/lib/user-search";
+import getUrl from "discourse-common/lib/get-url";
+import Uppy from "@uppy/core";
+import DropTarget from "@uppy/drop-target";
+import XHRUpload from "@uppy/xhr-upload";
 
 // original string `![image|foo=bar|690x220, 50%|bar=baz](upload://1TjaobgKObzpU7xRMw2HuUc87vO.png "image title")`
 // group 1 `image|foo=bar`
@@ -578,6 +582,93 @@ export default Component.extend(ComposerUploadUppy, {
   },
 
   @bind
+  _handleVideoThumbnailButtonClick(event) {
+    if (!event.target.classList.contains("timestamp-edit-btn")) {
+      return;
+    }
+
+    console.log('VideoThumbnailButtonClick');
+    var video = document.getElementById("thumb");
+    console.log(video);
+
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let ssContainer = document.getElementById("screenshot-placeholder");
+    let videoHeight, videoWidth;
+    videoHeight = video.videoHeight;
+    videoWidth = video.videoWidth;
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+
+    ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+    var img = new Image();
+    img.src = canvas.toDataURL("image/png");
+    img.width = videoWidth;
+    img.height = videoHeight;
+    ssContainer.appendChild(img);
+
+    // Now upload the image
+    //
+    //const id = this.get("field.id");
+    const id = 12;
+    this._uppyInstance = new Uppy({
+      id: `screenshot-placeholder`,
+      meta: { upload_type: `thumbnail_${id}` },
+      autoProceed: true,
+    });
+
+    this._uppyInstance.use(XHRUpload, {
+      endpoint: getUrl("/uploads.json"),
+      headers: {
+        "X-CSRF-Token": this.session.csrfToken,
+      },
+    });
+
+    this._uppyInstance.use(DropTarget, { target: this.element });
+
+    this._uppyInstance.on("upload", () => {
+      this.set("uploading", true);
+    });
+
+    this._uppyInstance.on("upload-success", (file, response) => {
+      this.set("field.value", response.body.url);
+      this.set("uploading", false);
+    });
+
+    this._uppyInstance.on("upload-error", (file, error, response) => {
+      let message = I18n.t("wizard.upload_error");
+      if (response.body.errors) {
+        message = response.body.errors.join("\n");
+      }
+
+      this.dialog.alert(message);
+      this.set("uploading", false);
+    });
+
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
+      try {
+        this._uppyInstance.addFile({
+          source: `${this.id} file input`,
+          name: file.name,
+          type: file.type,
+          data: file,
+        });
+      } catch (err) {
+        warn(`error adding files to uppy: ${err}`, {
+          id: "discourse.upload.uppy-add-files-error",
+        });
+      }
+    });
+
+
+
+
+    event.preventDefault();
+    return;
+  },
+
+  @bind
   _handleImageScaleButtonClick(event) {
     if (!event.target.classList.contains("scale-btn")) {
       return;
@@ -927,6 +1018,7 @@ export default Component.extend(ComposerUploadUppy, {
       resolveAllShortUrls(ajax, this.siteSettings, preview);
 
       preview.addEventListener("click", this._handleImageScaleButtonClick);
+      preview.addEventListener("click", this._handleVideoThumbnailButtonClick);
       this._registerImageAltTextButtonClick(preview);
 
       this.trigger("previewRefreshed", preview);
