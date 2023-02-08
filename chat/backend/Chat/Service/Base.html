@@ -115,6 +115,8 @@
 
 <p>The methods defined on the service are automatically provided with the whole context passed as keyword arguments. This allows to define in a very explicit way what dependencies are used by the method. If for whatever reason a key isn’t found in the current context, then Ruby will raise an exception when the method is called.</p>
 
+<p>Regarding contract classes, they have automatically ActiveModel modules included so all the ActiveModel API is available.</p>
+
 
   </div>
 </div>
@@ -338,7 +340,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 288</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 291</span>
 
 </pre>
     </td>
@@ -385,7 +387,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 276</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 279</span>
 
 </pre>
     </td>
@@ -430,7 +432,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 299</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 302</span>
 
 </pre>
     </td>
