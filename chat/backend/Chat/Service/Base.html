@@ -332,7 +332,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Runs arbitrary code.</p>
+<p>Runs steps inside a DB transaction.</p>
 </div></span>
   
 </li>
@@ -620,8 +620,6 @@
     
 <p>Runs arbitrary code. To mark a step as failed, a call to #fail! needs to be made explicitly.</p>
 
-<p>Runs steps inside a DB transaction.</p>
-
 
   </div>
 </div>
@@ -652,13 +650,6 @@
   <span class='id identifier rubyid_fail!'>fail!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>something went wrong</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
 <span class='kw'>end</span></code></pre>
     
-      
-      <pre class="example code"><code><span class='id identifier rubyid_transaction'>transaction</span> <span class='kw'>do</span>
-  <span class='id identifier rubyid_step'>step</span> <span class='symbol'>:prevents_slug_collision</span>
-  <span class='id identifier rubyid_step'>step</span> <span class='symbol'>:soft_delete_channel</span>
-  <span class='id identifier rubyid_step'>step</span> <span class='symbol'>:log_channel_deletion</span>
-<span class='kw'>end</span></code></pre>
-    
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
@@ -675,22 +666,6 @@
         &mdash;
         <div class='inline'>
 <p>the name of this step</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>block</span>
-      
-      
-        <span class='type'>(<tt>Proc</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>a block containing steps to be run inside a transaction</p>
 </div>
       
     </li>
@@ -727,8 +702,6 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Runs arbitrary code. To mark a step as failed, a call to #fail! needs to be made explicitly.</p>
-
 <p>Runs steps inside a DB transaction.</p>
 
 
@@ -740,28 +713,6 @@
     <p class="tag_title">Examples:</p>
     
       
-      <pre class="example code"><code><span class='id identifier rubyid_step'>step</span> <span class='symbol'>:update_channel</span>
-
-<span class='id identifier rubyid_private'>private</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_update_channel'>update_channel</span><span class='lparen'>(</span><span class='label'>channel:</span><span class='comma'>,</span> <span class='label'>params_to_edit:</span><span class='comma'>,</span> <span class='op'>**</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_update!'>update!</span><span class='lparen'>(</span><span class='id identifier rubyid_params_to_edit'>params_to_edit</span><span class='rparen'>)</span>
-<span class='kw'>end</span></code></pre>
-    
-      
-        <p class="example_title"><div class='inline'>
-<p>using #fail! in a step</p>
-</div></p>
-      
-      <pre class="example code"><code><span class='id identifier rubyid_step'>step</span> <span class='symbol'>:save_channel</span>
-
-<span class='id identifier rubyid_private'>private</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_save_channel'>save_channel</span><span class='lparen'>(</span><span class='label'>channel:</span><span class='comma'>,</span> <span class='op'>**</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_fail!'>fail!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>something went wrong</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_channel'>channel</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
-<span class='kw'>end</span></code></pre>
-    
-      
       <pre class="example code"><code><span class='id identifier rubyid_transaction'>transaction</span> <span class='kw'>do</span>
   <span class='id identifier rubyid_step'>step</span> <span class='symbol'>:prevents_slug_collision</span>
   <span class='id identifier rubyid_step'>step</span> <span class='symbol'>:soft_delete_channel</span>
@@ -771,22 +722,6 @@
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
-  
-    <li>
-      
-        <span class='name'>name</span>
-      
-      
-        <span class='type'>(<tt>Symbol</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>the name of this step</p>
-</div>
-      
-    </li>
   
     <li>
       
@@ -816,7 +751,7 @@
 </pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'plugins/chat/app/services/base.rb', line 367</span>
 
 </pre>
     </td>
