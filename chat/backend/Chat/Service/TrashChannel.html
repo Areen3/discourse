@@ -118,7 +118,7 @@
     <p class="tag_title">Examples:</p>
     
       
-      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../Chat.html" title="Chat (module)">Chat</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Service.html" title="Chat::Service (module)">Service</a></span></span><span class='op'>::</span><span class='const'>TrashChannel</span><span class='period'>.</span><span class='id identifier rubyid_call'><span class='object_link'><a href="#call-instance_method" title="Chat::Service::TrashChannel#call (method)">call</a></span></span><span class='lparen'>(</span><span class='label'>channel:</span> <span class='id identifier rubyid_channel'>channel</span><span class='comma'>,</span> <span class='label'>guardian:</span> <span class='id identifier rubyid_guardian'>guardian</span><span class='rparen'>)</span></code></pre>
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../../Chat.html" title="Chat (module)">Chat</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Service.html" title="Chat::Service (module)">Service</a></span></span><span class='op'>::</span><span class='const'>TrashChannel</span><span class='period'>.</span><span class='id identifier rubyid_call'><span class='object_link'><a href="#call-instance_method" title="Chat::Service::TrashChannel#call (method)">call</a></span></span><span class='lparen'>(</span><span class='label'>channel_id:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>guardian:</span> <span class='id identifier rubyid_guardian'>guardian</span><span class='rparen'>)</span></code></pre>
     
   </div>
 
@@ -157,7 +157,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#call-instance_method" title="#call (instance method)">#<strong>call</strong>(channel: , guardian: )  &#x21d2; Chat::Service::Base::Context </a>
+      <a href="#call-instance_method" title="#call (instance method)">#<strong>call</strong>(channel_id: , guardian: )  &#x21d2; Chat::Service::Base::Context </a>
     
 
     
@@ -200,7 +200,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="call-instance_method">
   
-    #<strong>call</strong>(channel: , guardian: )  &#x21d2; <tt><span class='object_link'><a href="Base/Context.html" title="Chat::Service::Base::Context (class)">Chat::Service::Base::Context</a></span></tt> 
+    #<strong>call</strong>(channel_id: , guardian: )  &#x21d2; <tt><span class='object_link'><a href="Base/Context.html" title="Chat::Service::Base::Context (class)">Chat::Service::Base::Context</a></span></tt> 
   
 
   
@@ -218,10 +218,10 @@
   
     <li>
       
-        <span class='name'>channel</span>
+        <span class='name'>channel_id</span>
       
       
-        <span class='type'>(<tt>ChatChannel</tt>)</span>
+        <span class='type'>(<tt>Integer</tt>)</span>
       
       
         <em class="default">(defaults to: <tt></tt>)</em>
