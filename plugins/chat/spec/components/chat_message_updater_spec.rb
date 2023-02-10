@@ -150,7 +150,7 @@ describe Chat::ChatMessageUpdater do
     }.not_to change { ChatMention.count }
   end
 
-  it "doesn't create mentions for users without access" do
+  it "doesn't create mention notification for users without access" do
     message = "ping"
     chat_message = create_chat_message(user1, message, public_chat_channel)
 
