@@ -189,15 +189,17 @@ describe Chat::ChatMessageUpdater do
     expect(user4.chat_mentions.where(chat_message: chat_message)).to be_present
   end
 
-  it "does not create new mentions in direct message for users who don't have access" do
-    chat_message = create_chat_message(user1, "ping nobody", @direct_message_channel)
-    expect {
-      Chat::ChatMessageUpdater.update(
-        guardian: guardian,
-        chat_message: chat_message,
-        new_content: "ping @#{admin1.username}",
-      )
-    }.not_to change { ChatMention.count }
+  it "does not create notifications for mentions in direct message for users who don't have access" do
+    message = create_chat_message(user1, "ping nobody", @direct_message_channel)
+
+    Chat::ChatMessageUpdater.update(
+      guardian: guardian,
+      chat_message: message,
+      new_content: "ping @#{admin1.username}",
+    )
+
+    mention = admin1.chat_mentions.where(chat_message: message).first
+    expect(mention.notification).to be_nil
   end
 
   describe "group mentions" do
