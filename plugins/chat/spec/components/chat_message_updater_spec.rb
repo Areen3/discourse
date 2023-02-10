@@ -190,7 +190,7 @@ describe Chat::ChatMessageUpdater do
     expect(user4.chat_mentions.where(chat_message: chat_message)).to be_present
   end
 
-  it "does not create notifications for mentions in direct message for users who don't have access" do
+  it "doesn't create mention notification in direct message for users without access" do
     message = create_chat_message(user1, "ping nobody", @direct_message_channel)
 
     Chat::ChatMessageUpdater.update(
