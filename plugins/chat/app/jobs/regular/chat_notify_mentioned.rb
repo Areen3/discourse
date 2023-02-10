@@ -111,6 +111,7 @@ module Jobs
           data: notification_data.to_json,
           read: is_read,
         )
+
       mention = ChatMention.where(user: membership.user, chat_message: @chat_message).first
       mention.notification = notification
       mention.save!
