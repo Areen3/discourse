@@ -40,7 +40,6 @@ class Chat::ChatMessageUpdater
       DiscourseEvent.trigger(:chat_message_edited, @chat_message, @chat_channel, @user)
     rescue => error
       @error = error
-      raise error
     end
   end
 

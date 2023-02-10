@@ -67,7 +67,6 @@ class Chat::ChatMessageCreator
       DiscourseEvent.trigger(:chat_message_created, @chat_message, @chat_channel, @user)
     rescue => error
       @error = error
-      raise error
     end
   end
 
