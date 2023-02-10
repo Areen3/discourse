@@ -228,47 +228,63 @@ describe Chat::ChatMessageCreator do
     end
 
     it "doesn't create mention notifications for users without a membership record" do
-      expect {
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: public_chat_channel,
           user: user1,
           content: "hello @#{user_without_memberships.username}",
-        )
-      }.not_to change { ChatMention.count }
+        ).chat_message
+
+      mention = user_without_memberships.chat_mentions.where(chat_message: message).first
+      expect(mention.notification).to be_nil
     end
 
     it "doesn't create mention notifications for users who cannot chat" do
       new_group = Group.create
       SiteSetting.chat_allowed_groups = new_group.id
-      expect {
+
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: public_chat_channel,
           user: user1,
           content: "hi @#{user2.username} @#{user3.username}",
-        )
-      }.not_to change { ChatMention.count }
+        ).chat_message
+
+      user2_mention = user2.chat_mentions.where(chat_message: message).first
+      expect(user2_mention.notification).to be_nil
+
+      user3_mention = user2.chat_mentions.where(chat_message: message).first
+      expect(user3_mention.notification).to be_nil
     end
 
     it "doesn't create mention notifications for users with chat disabled" do
       user2.user_option.update(chat_enabled: false)
-      expect {
+
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: public_chat_channel,
           user: user1,
           content: "hi @#{user2.username}",
-        )
-      }.not_to change { ChatMention.count }
+        ).chat_message
+
+      mention = user2.chat_mentions.where(chat_message: message).first
+      expect(mention.notification).to be_nil
     end
 
     it "creates only mention notifications for users with access in private chat" do
-      expect {
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: direct_message_channel,
           user: user1,
           content: "hello there @#{user2.username} and @#{user3.username}",
-        )
-        # Only user2 should be notified
-      }.to change { user2.chat_mentions.count }.by(1).and not_change { user3.chat_mentions.count }
+        ).chat_message
+
+      # Only user2 should be notified
+      user2_mention = user2.chat_mentions.where(chat_message: message).first
+      expect(user2_mention.notification).to be_present
+
+      user3_mention = user3.chat_mentions.where(chat_message: message).first
+      expect(user3_mention.notification).to be_nil
     end
 
     it "creates a mention notifications for group users that are participating in private chat" do
@@ -310,15 +326,18 @@ describe Chat::ChatMessageCreator do
       )
     end
 
-    it "does not create mentions for suspended users" do
+    it "does not create mention notifications for suspended users" do
       user2.update(suspended_till: Time.now + 10.years)
-      expect {
+
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: direct_message_channel,
           user: user1,
           content: "hello @#{user2.username}",
-        )
-      }.not_to change { user2.chat_mentions.count }
+        ).chat_message
+
+      mention = user2.chat_mentions.where(chat_message: message).first
+      expect(mention.notification).to be_nil
     end
 
     it "does not create @all mentions for users when ignore_channel_wide_mention is enabled" do
