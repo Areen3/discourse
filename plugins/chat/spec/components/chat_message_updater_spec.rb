@@ -154,13 +154,14 @@ describe Chat::ChatMessageUpdater do
     message = "ping"
     chat_message = create_chat_message(user1, message, public_chat_channel)
 
-    expect {
-      Chat::ChatMessageUpdater.update(
-        guardian: guardian,
-        chat_message: chat_message,
-        new_content: message + " @#{user_without_memberships.username}",
-      )
-    }.not_to change { ChatMention.count }
+    Chat::ChatMessageUpdater.update(
+      guardian: guardian,
+      chat_message: chat_message,
+      new_content: message + " @#{user_without_memberships.username}",
+    )
+
+    mention = user_without_memberships.chat_mentions.where(chat_message: chat_message).first
+    expect(mention.notification).to be_nil
   end
 
   it "destroys mention notifications that should be removed" do
