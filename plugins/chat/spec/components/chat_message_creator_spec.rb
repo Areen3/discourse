@@ -144,15 +144,27 @@ describe Chat::ChatMessageCreator do
     end
 
     it "creates mention notifications for public chat" do
-      expect {
+      message =
         Chat::ChatMessageCreator.create(
           chat_channel: public_chat_channel,
           user: user1,
           content:
             "this is a @#{user1.username} message with @system @mentions @#{user2.username} and @#{user3.username}",
-        )
-        # Only 2 mentions are created because user mentioned themselves, system, and an invalid username.
-      }.to change { ChatMention.count }.by(2).and not_change { user1.chat_mentions.count }
+        ).chat_message
+
+      # a notification for the user himself wasn't created
+      user1_mention = user1.chat_mentions.where(chat_message: message).first
+      expect(user1_mention.notification).to be_nil
+
+      system_user_mention =
+        User.where(id: -1).first.chat_mentions.where(chat_message: message).first
+      expect(system_user_mention.notification).to be_nil
+
+      user2_mention = user2.chat_mentions.where(chat_message: message).first
+      expect(user2_mention.notification).to be_present
+
+      user3_mention = user3.chat_mentions.where(chat_message: message).first
+      expect(user3_mention.notification).to be_present
     end
 
     it "mentions are case insensitive" do
