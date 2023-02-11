@@ -142,8 +142,7 @@ module TopicGuardian
   end
 
   def can_recover_topic?(topic)
-    if is_staff? || (topic&.category && is_category_group_moderator?(topic.category)) ||
-         (SiteSetting.tl4_delete_posts_and_topics && user.has_trust_level?(TrustLevel[4]))
+    if is_staff? || (topic&.category && is_category_group_moderator?(topic.category))
       !!(topic && topic.deleted_at)
     else
       topic && can_recover_post?(topic.ordered_posts.first)
